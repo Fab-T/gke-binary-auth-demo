@@ -258,7 +258,7 @@ To be able to see when any and all images are blocked by the Binary Authorizatio
 
 #### Denying Images Except From Whitelisted Container Registries
 
-Let's say that we actually want to allow *just* that nginx container to run.  The quickest step to enable this is to *whitelist* the registry that it comes from.  To do this, edit the Binary Authorization Policy and add a new image path entry.  The image below shows an example path, but you will want to use the output of the following command as your image path instead:
+Let's say that we actually want to allow *just* that nginx container registry to run.  The quickest step to enable this is to *whitelist* the registry that it comes from.  To do this, edit the Binary Authorization Policy and add a new image path entry.  The image below shows an example path, but you will want to use the output of the following command as your image path instead:
 
 ```console
 echo "gcr.io/${PROJECT_ID}/nginx*"
@@ -290,6 +290,13 @@ Run the following to clean up and prepare for the next steps:
 ```console
 kubectl delete pod nginx
 ```
+Run the following to remove nginx images from the exception container registries :
+
+* Run `gcloud beta container binauthz policy export > policy.yaml`
+* remove the entry for nginx : `grep -v /nginx* policy.yaml > new-policy.yaml`
+* Run `gcloud beta container binauthz policy import new-policy.yaml`
+
+Let's now implement another method to allow *just* that nginx container registry to run. 
 
 #### Enforcing Attestations
 
